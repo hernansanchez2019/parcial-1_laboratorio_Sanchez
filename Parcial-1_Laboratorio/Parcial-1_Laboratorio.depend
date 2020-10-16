@@ -1,0 +1,26 @@
+# depslib dependency file v1.0
+1602808784 source:c:\users\hernan\desktop\parcial-1_laboratorio_sanchez\parcial-1_laboratorio\electrodomesticos.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"REPARACION.h"
+	"ELECTRODOMESTICOS.h"
+
+1602778698 c:\users\hernan\desktop\parcial-1_laboratorio_sanchez\parcial-1_laboratorio\reparacion.h
+
+1602807583 c:\users\hernan\desktop\parcial-1_laboratorio_sanchez\parcial-1_laboratorio\electrodomesticos.h
+
+1602809021 source:c:\users\hernan\desktop\parcial-1_laboratorio_sanchez\parcial-1_laboratorio\main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"REPARACION.h"
+	"ELECTRODOMESTICOS.h"
+
+1602804166 source:c:\users\hernan\desktop\parcial-1_laboratorio_sanchez\parcial-1_laboratorio\reparacion.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"REPARACION.h"
+	"ELECTRODOMESTICOS.h"
+
