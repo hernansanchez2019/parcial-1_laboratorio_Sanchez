@@ -1,10 +1,9 @@
-
+#include "REPARACION.h"
+#define LIBRE 0
+#define OCUPADO 1
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "REPARACION.h"
-#include "ELECTRODOMESTICOS.h"
-
 
 void mostrarService(Eservicios mantenimiento[],int tam)
 {
@@ -16,15 +15,19 @@ void mostrarService(Eservicios mantenimiento[],int tam)
 
     for(i=0; i < tam ; i++)
     {
-        printf("%14s  %10d\n",
-               mantenimiento[i].descripcion,
-               mantenimiento[i].precio);
+        if(mantenimiento[i].estadoServicio==OCUPADO)
+        {
+            printf("%14s  %10d\n",
+                   mantenimiento[i].descripcion,
+                   mantenimiento[i].precio);
+        }
+
     }
 
 }
 
 
-void fecha(Efecha fecha[], int tam)
+/*void fecha(Efecha fecha[], int tam)
 {
     int dia[4]= {1,26,15,8};
     int mes[4]= {10,12,3,4};
@@ -47,14 +50,16 @@ void mostramosFechas(Efecha fechas[], int tam)
     {
         printf("%d/%d/%d/\n", fechas[i].dia,fechas[i].mes,fechas[i].anio);
     }
-}
+}*/
 
 void servicio(Eservicios mantenimiento[], int tam)
 {
-    int idServicio[4]= {111,222,333,444};
+
+
+    int idServicio[4]={20000,20001,20002,20003};
     char descripcion[4][25]= {"Garantia","Mantenimiento","Repuestos","Refaccion"};
     int precio[4]= {250,500,400,600};
-    int estadoServicio[4]= {0,0,0,0};
+    int estadoServicio[4]= {1,1,1,1};
 
     int i;
 
@@ -66,48 +71,93 @@ void servicio(Eservicios mantenimiento[], int tam)
         strcpy(mantenimiento[i].descripcion,descripcion[i]);
     }
 
-}
 
-void reparaciones(Ereparacion arreglo[], int tam)
-{
-    int i;
 
-    int idReparacion[4]= {1001,1002,1003,1004};
-    int serie[4]= {956425,1115436,999526,666648};
-    int idServicio[4]= {111,222,333,444};
-
-    for(i=0; i < tam ; i++)
-    {
-        arreglo[i].idReparacion=idReparacion[i];
-        arreglo[i].serie=serie[i];
-        arreglo[i].idServicio=idServicio[i];
-    }
 
 }
 
 
-void mostramosReparaciones(Ereparacion arreglo[], int tam)
+void CargarCliente(Ecliente cliente[], int tam)
 {
+    int idCliente[5]={1000,1001,1002,1003,1004};
+    char nombre[5][20]={"Luis","Pedro","Mario","Ariel","Juan"};
+    char apellido[5][20]={"Perez","Gonzalez","Sanchez","Alvarez","Fernandez"};
+    int estadoCliente[5]={1,1,1,1,1};
+
     int i;
-
-
-    printf("\n\tREPARACIONES\n");
-    printf("\nId Reparacion      Num.Serie     Id Servicio\n\n");
 
     for(i=0; i < tam ; i++)
     {
-
-             printf("%15d%14d%15d \n",
-               arreglo[i].idReparacion,
-               arreglo[i].serie,
-               arreglo[i].idServicio/*,
-               arreglo[i].fecha.dia,
-               arreglo[i].fecha.mes,
-               arreglo[i].fecha.anio*/);
-
-
-
+        cliente[i].idCliente=idCliente[i];
+        cliente[i].estadoCliente=estadoCliente[i];
+        strcpy(cliente[i].nombre, nombre[i]);
+        strcpy(cliente[i].apellido, apellido[i]);
     }
 
 
 }
+
+
+void mostrarClientes(Ecliente clientes[], int tam)
+{
+
+    printf("\n\tCLIENTES\n");
+
+    printf("ID  |     Nombre   |  Apellido\n");
+
+    int i;
+
+    for(i=0 ; i < tam ; i++)
+    {
+        if(clientes[i].estadoCliente==OCUPADO)
+        {
+            printf("%7d%10s%10s\n", clientes[i].idCliente, clientes[i].nombre, clientes[i].apellido);
+        }
+    }
+
+
+
+
+
+}
+
+/*void reparaciones(Ereparacion arreglo[], int tamArreglo,int idReparacion, Eelectrodomestico aparato[], int tam, Eservicios mantenimiento[], int tamService)
+{
+
+    arreglo[tamArreglo].idReparacion=idReparacion;
+
+    if(arreglo[tamArreglo].serie!=aparato[tam].serie)
+    {
+        printf("Numero de serie inexistente !!!");
+    }
+
+    else
+    {
+        arreglo[tamArreglo].serie==aparato[tam].serie;
+    }
+
+    if(arreglo[tamArreglo].idServicio!=mantenimiento[tamService].idServicio)
+    {
+        printf("Numero de servicio inexistente !!!");
+    }
+
+    else
+    {
+        arreglo[tamArreglo].idServicio==mantenimiento[tamService].idServicio;
+    }
+
+
+}
+
+
+void altaReparaciones(Eelectrodomestico aparato[], int tam, Eservicios mantenimiento[], int tamService)
+{
+
+    printf("\tALTA REPARACIONES\n");
+
+    MostrarElectrodomesticos(aparato,tam);
+    mostrarService(mantenimiento,tamService);
+
+
+}
+*/

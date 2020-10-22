@@ -3,20 +3,27 @@
 #include <string.h>
 #include "REPARACION.h"
 #include "ELECTRODOMESTICOS.h"
-
+#include "repElectroService.h"
+#define TAM 10
+#define LIBRE 0
+#define OCUPADO 1
 
 int main()
 {
-
-    Eelectrodomestico aparato[5];
-    Emarca listaMarca[5];
-    Eservicios service[4];
+    Eelectrodomestico aparato[TAM];
+    Emarca listaMarca[TAM];
+    Eservicios service[TAM];
    // Efecha fechas[5];
-    Ereparacion arreglos[5];
+    Ereparacion arreglos[TAM];
+    Ecliente clientes[TAM];
+
+InicializarEstado(aparato,TAM);
 
 
     int respuesta;
-    int flag=0;
+
+    int idReparacion=100;
+
 
     do
     {
@@ -31,34 +38,30 @@ int main()
         printf("\n8. LISTAR REPARACIONES");
         printf("\n9. SALIR");
         printf("\ningrese una opcion: 1/2/3/4/5/6/7/8/9 = ");
+
         scanf("%d",&respuesta);
-        while(respuesta < 0 || respuesta > 9) // VALIDAMOS QUE ENTRE A ESAS OPCIONES
+        while(respuesta < 1 || respuesta > 9)
         {
             fflush(stdin);
-            printf("Error..opcion incorrecta: 1/2/3/4/5/6/7/8/9 = ");
-            scanf("%d",&respuesta);
-
+            printf("\nError...Reingrese opcion 1/2/3/4/5/6/7/8/9 --> ");
+            scanf("%d", &respuesta);
         }
 
 
         switch(respuesta)
         {
         case 1:
-            if(flag==0)
-            {
-                electrodomesticos(aparato,5);
-                mostrarElect(aparato,5);
-                printf("Electrodomesticos cargados\n");
-                flag=1;
+                system("cls");
+                CargarElectrodomestico(aparato,TAM,listaMarca,5);
                 system("PAUSE");
                 system("cls");
                 break;
-            }
+
 
         case 2:
-            if(flag==1)
+            if(EstadosElectrodomesticos(aparato,TAM)==OCUPADO)
             {
-                modificarElectro(aparato,5);
+                modificarElectro(aparato,TAM,listaMarca,5);
                 system("PAUSE");
                 system("cls");
                 break;
@@ -74,13 +77,13 @@ int main()
             }
 
         case 3:
-            if(flag==1)
+            if(EstadosElectrodomesticos(aparato,TAM)==OCUPADO)
             {
-                BajaElectrodomesticos(aparato,5);
+                BajaElectrodomesticos(aparato,TAM,listaMarca,TAM);
                 system("PAUSE");
                 system("cls");
                 break;
-            }
+           }
             else
             {
                 printf("No hay Electrodomesticos cargados !!!\n");
@@ -91,10 +94,11 @@ int main()
 
 
         case 4:
-            if(flag==1)
+            if(EstadosElectrodomesticos(aparato,TAM)==OCUPADO)
             {
-                ordenamiento(aparato,5);
-                mostrarElect(aparato,5);
+                system("cls");
+
+                listaElectrodomesticos(aparato,TAM);
                 system("PAUSE");
                 system("cls");
                 break;
@@ -109,44 +113,27 @@ int main()
 
 
         case 5:
-            if(flag==1)
-            {
-                marca(listaMarca,5);
-                mostrarMarca(listaMarca,5);
+                system("cls");
+                marca(listaMarca,TAM);
+                listarMarcas(listaMarca,TAM);
                 system("PAUSE");
                 system("cls");
                 break;
-            }
-            else
-            {
-                printf("No hay Electrodomesticos cargados !!!\n");
-                system("PAUSE");
-                system("cls");
-                break;
-            }
 
         case 6:
-            if(flag==1)
-            {
-                servicio(service,4);
-                mostrarService(service,4);
+
+                servicio(service,TAM);
+                mostrarService(service,TAM);
                 system("PAUSE");
                 system("cls");
                 break;
-            }
-            else
-            {
-                printf("No hay Electrodomesticos cargados !!!\n");
-                system("PAUSE");
-                system("cls");
-                break;
-            }
 
         case 7:
-            if(flag==1)
+            if(EstadosElectrodomesticos(aparato,TAM)==OCUPADO)
             {
-                reparaciones(arreglos,4);
-                mostramosReparaciones(arreglos,4);
+
+                altaReparaciones(aparato,TAM,service,TAM,listaMarca,5,arreglos,5,idReparacion,clientes,5);
+                idReparacion++;
                 system("PAUSE");
                 system("cls");
                 break;
@@ -161,13 +148,13 @@ int main()
             }
 
         case 8:
-            if(flag==1)
-            {
-                mostramosReparaciones(arreglos,4);
+           /* if(EstadosElectrodomesticos(aparato,TAM)==OCUPADO)
+            {*/
+                listarReparaciones(arreglos,TAM,service,TAM,clientes,TAM);
                 system("PAUSE");
                 system("cls");
                 break;
-            }
+           /* }
              else
             {
                 printf("No hay Electrodomesticos cargados !!!\n");
@@ -175,15 +162,13 @@ int main()
                 system("cls");
                 break;
 
-            }
-
+            }*/
 
         case 9:
             printf("PROGRAMA FINALIZADO");
             break;
 
         }
-
 
     }
     while(respuesta!=9);

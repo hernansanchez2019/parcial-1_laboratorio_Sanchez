@@ -1,52 +1,140 @@
+#include "ELECTRODOMESTICOS.h"
+#include "REPARACION.h"
+#define LIBRE 0
+#define OCUPADO 1
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "REPARACION.h"
-#include "ELECTRODOMESTICOS.h"
-
-void electrodomesticos(Eelectrodomestico aparato[], int tam)
+int EstadosElectrodomesticos(Eelectrodomestico aparato[], int tam)
 {
     int i;
-
-    int id[5]= {100,200,300,400,500};
-    int serie[5]= {11111,22222,33333,44444,5555};
-    int idMarca[5]= {111,222,333,444,555};
-    int modelo[5]= {2010,2012,2015,2020,2018};
-    int estadoElectro[5]= {0,0,0,0,0};
+    int estado= LIBRE;
 
 
-    for(i=0; i < tam ; i++)
+    for(i=0; i<tam; i++)
     {
-        aparato[i].id=id[i];
-        aparato[i].serie=serie[i];
-        aparato[i].idMarca=idMarca[i];
-        aparato[i].modelo=modelo[i];
-        aparato[i].estadoElectro=estadoElectro[i];
+        if(aparato[i].estadoElectro==OCUPADO) // MUESTRA SOLO LOS QUE ESTAN OCUPADOS
+        {
+            estado=OCUPADO;
+            break; // EL PRIMERO QUE BUSCA, CORTA
+        }
+
+
     }
 
+    return estado;
 
 }
 
-void mostrarElect(Eelectrodomestico aparato[], int tam)
+
+int BuscarLibre(Eelectrodomestico aparato[], int tam)
+{
+
+
+    int indice=-1; // el -1 representa el indice
+    int i;
+
+
+    for(i=0; i<tam; i++)// RECORREMOS EL VECTOR
+    {
+
+        if(aparato[i].estadoElectro==LIBRE)// CUANDO ESTA LIBRE ENTRA
+        {
+            indice=i;
+            break; // cuando se cumple la condicion se queda con ese indice y el break corta ahi
+        }
+
+    }
+
+    return indice; // DEVUELVE ESE LUGAR LIBRE 0, -1
+
+}
+
+void InicializarEstado(Eelectrodomestico aparato[], int tam)
 {
     int i;
 
-    printf("\t'ELECTRODOMESTICOS'\n\n");
-    printf("Id    Marca      Modelo   Serie  \n");
-
-    for(i=0; i < tam ; i++)
+    for(i=0; i< tam ; i++)
     {
+        aparato[i].estadoElectro=LIBRE; // CLIENTE INICIALIZADO EN I = CERO
+    }
 
-        if(aparato[i].estadoElectro==0) // FILTRAMOS POR ESTADO
+}
+
+
+
+
+
+void CargarElectrodomestico(Eelectrodomestico aparato[], int tam, Emarca marcas[], int cantMarca) // CARGAMOS UN EMPLEADO DE A UNO
+{
+    int lugarLibre;
+
+    lugarLibre= BuscarLibre(aparato,tam);
+
+    if(lugarLibre==-1)
+    {
+        printf("\nNo hay mas espacio\n");
+    }
+    else
+    {
+        printf("\tIngreso de electrodomestico\n");
+
+        printf("Ingresar ID del electrodomestico: ");
+        scanf("%d", &aparato[lugarLibre].id);
+
+        printf("Ingresar el num. de serie: ");
+        scanf("%d", &aparato[lugarLibre].serie);
+
+        printf("Ingresar el modelo : ");
+        scanf("%d", &aparato[lugarLibre].modelo);
+
+
+
+        marca(marcas,cantMarca);
+        mostrarMarca(marcas,cantMarca);
+
+        printf("Ingrese el ID de la marca: ");
+        scanf("%d", &aparato[lugarLibre].idMarca);
+
+     //VALIDAMOS LAS MARCAS
+        while(aparato[lugarLibre].idMarca < 100 || aparato[lugarLibre].idMarca >=105)
         {
-            printf("%3d  %3d %13d %9d\n",
-                   aparato[i].id,
-                   aparato[i].idMarca,
-                   aparato[i].modelo,
-                   aparato[i].serie);
+            fflush(stdin);
+            printf("Error...marca Inexistente, intentelo nuevamente: ");
+            scanf("%d", &aparato[lugarLibre].idMarca);
 
         }
 
+
+        aparato[lugarLibre].estadoElectro=OCUPADO; // CLIENTE OCUPADO
+
+        printf("Electrodomestico cargado con exito !!!\n");
+
+    }
+
+}
+
+void MostrarElectrodomesticos(Eelectrodomestico aparato[], int tam, Emarca marcas[], int cantMarca)
+{
+    int i;
+    int j;
+
+    printf("\tELECTRODOMESTICOS CARGADOS CON SU MARCA\n");
+
+    printf("\nId Electro.   Marca   Num.Serie    Modelo \n");
+    for(i=0; i<tam; i++)
+    {
+        for(j= 0; j < cantMarca ; j++)
+        {
+            if(aparato[i].idMarca==marcas[j].idMarca)
+            {
+                if(aparato[i].estadoElectro==OCUPADO)// MUESTRA SOLO LOS QUE ESTAN OCUPADOS
+                {
+                    printf("\n%10d%10s%10d%10d \n",aparato[i].id,marcas[j].descripcion, aparato[i].serie, aparato[i].modelo);
+                }
+            }
+
+        }
 
     }
 
@@ -59,11 +147,11 @@ void mostrarMarca(Emarca marca[], int tam)
 
 
     printf("\n\t'MARCA'\n\n");
-    printf("Descripcion\n\n");
+    printf("ID  Descripcion\n\n");
 
     for(i=0; i < tam ; i++)
     {
-        printf("%s\n",marca[i].descripcion);
+        printf("%d  %s\n",marca[i].idMarca,marca[i].descripcion);
     }
 
 }
@@ -72,9 +160,9 @@ void mostrarMarca(Emarca marca[], int tam)
 void marca(Emarca ListaMarca[], int tam)
 {
 
-    int idMarca[5]= {111,222,333,444,555};
+    int idMarca[5]= {100,101,102,103,104};
     char descripcion[5][20]= {"Wirpool"," Sony"," Liliana","Gafa","Philips"};
-    int estadoMarca[5]= {0,0,0,0,0};
+    int estadoMarca[5]= {1,1,1,1,1};
 
     int i;
 
@@ -88,30 +176,31 @@ void marca(Emarca ListaMarca[], int tam)
 }
 
 
-void BajaElectrodomesticos(Eelectrodomestico aparato[],int tam)
+void BajaElectrodomesticos(Eelectrodomestico aparato[],int tam, Emarca marcas[], int cantMarca)
 {
     int i;
     int IndiceBaja;
 
-    mostrarElect(aparato,tam);
+    MostrarElectrodomesticos(aparato,tam,marcas,cantMarca);
 
-    printf("Escriba el ID del electrodomestico para la baja = ");
+    printf("\nEscriba el ID del electrodomestico para la baja = ");
     scanf("%d", &IndiceBaja);
 
     for(i=0 ; i < tam ; i++)
     {
         if(IndiceBaja==aparato[i].id)
         {
-            aparato[i].estadoElectro=1;
+            aparato[i].estadoElectro=LIBRE;
         }
     }
 
     printf("Baja Realizada con exito!!!!\n");
 
-
 }
 
-void modificarElectro(Eelectrodomestico aparato[], int tam)
+
+
+void modificarElectro(Eelectrodomestico aparato[], int tam, Emarca marcas[], int cantMarcas)
 {
 
     int auxSerie;
@@ -120,15 +209,14 @@ void modificarElectro(Eelectrodomestico aparato[], int tam)
     int opcion;
     int i;
 
-    mostrarElect(aparato,tam);
+    MostrarElectrodomesticos(aparato,tam,marcas, cantMarcas);
 
     printf("Ingrese el ID del Electrodomestico que quiere modificar = ");
     scanf("%d",&auxID);
 
     for(i=0; i < tam ; i++)
     {
-
-        if(auxID==aparato[i].id && aparato[i].estadoElectro==0)
+        if(auxID==aparato[i].id && aparato[i].estadoElectro==OCUPADO)
         {
             do
             {
@@ -136,8 +224,10 @@ void modificarElectro(Eelectrodomestico aparato[], int tam)
 
                 printf("\n1- Modificar Serie");
                 printf("\n2- Modificar Modelo");
-                printf("\n3- Volver al menu principal");
-                printf("\nIngrese una opcion: 1/2/3");
+                printf("\n3- Ver listado de Electrodomesticos");
+                printf("\n4- Volver al menu principal");
+                printf("\nIngrese una opcion: 1/2/3/4: ");
+                fflush(stdin);
                 scanf("%d", &opcion);
 
                 switch(opcion)
@@ -159,10 +249,16 @@ void modificarElectro(Eelectrodomestico aparato[], int tam)
                     system("PAUSE");
                     system("cls");
                     break;
+
+                case 3:
+                    MostrarElectrodomesticos(aparato,tam,marcas,cantMarcas);
+                    system("PAUSE");
+                    system("cls");
+                    break;
                 }
 
             }
-            while(opcion!=3);
+            while(opcion!=4);
 
         }
 
@@ -203,3 +299,47 @@ void ordenamiento(Eelectrodomestico aparato[], int tam) // electrodomésticos ord
 
 
 }
+
+void listaElectrodomesticos(Eelectrodomestico aparato[], int tam)
+{
+
+    int i;
+
+    printf("\tLISTADO DE ELECTRODOMESTICOS\n");
+
+    printf("\nNum.Serie  |   Modelo \n");
+
+
+    for(i=0 ; i < tam ; i++)
+    {
+        if(aparato[i].estadoElectro==OCUPADO)
+        {
+            printf("%10d | %10d\n", aparato[i].serie, aparato[i].modelo);
+
+        }
+
+    }
+
+}
+
+
+void listarMarcas(Emarca marcas[], int cantMarcas)
+{
+     int i;
+
+    printf("\tLISTADO DE MARCAS\n");
+
+    printf("\nDescripcion : \n\n");
+
+
+    for(i=0 ; i < cantMarcas ; i++)
+    {
+        if(marcas[i].estadoMarca==OCUPADO)
+        {
+            printf("%8s |\n",marcas[i].descripcion);
+
+        }
+
+    }
+}
+
